@@ -29,3 +29,9 @@ $ java -jar simple-kinesis-consumer.jar -streamName <STREAM NAME> -streamRegion 
 Default arguments: 
 * region=us-east-1 
 * AWS credentials profile = default 
+
+
+### Get aws kinesis list-streams"
+```shell script
+$ aws kinesis list-streams --region us-east-1 --profile default
+```
