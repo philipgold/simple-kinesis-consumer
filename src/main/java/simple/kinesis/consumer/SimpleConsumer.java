@@ -18,8 +18,6 @@ import java.lang.invoke.MethodHandles;
 import org.apache.commons.cli.*;
 
 import java.util.List;
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.util.StatusPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +51,6 @@ public class SimpleConsumer implements IRecordProcessorFactory {
 
       for (Record r : records) {
         // Get the timestamp of this run from the partition key.
-        //System.out.println("### PartitionKey: " + r.getPartitionKey());
         LOGGER.info("### PartitionKey: " + r.getPartitionKey());
 
         // Extract the sequence number. It's encoded as a decimal
@@ -63,10 +60,8 @@ public class SimpleConsumer implements IRecordProcessorFactory {
         try {
           byte[] b = new byte[r.getData().remaining()];
           r.getData().get(b);
-          //System.out.println(new String(b, "UTF-8"));
           LOGGER.info(new String(b, "UTF-8"));
         } catch (Exception e) {
-          //System.out.println("Error parsing record" + e);
           LOGGER.error("Error parsing record" + e);
           System.exit(1);
         }
@@ -75,7 +70,6 @@ public class SimpleConsumer implements IRecordProcessorFactory {
       try {
         checkpointer.checkpoint();
       } catch (Exception e) {
-        //System.out.println("Error while trying to checkpoint during ProcessRecords" + e);
         LOGGER.error("Error while trying to checkpoint during ProcessRecords" + e);
       }
     }
@@ -86,7 +80,6 @@ public class SimpleConsumer implements IRecordProcessorFactory {
       try {
         checkpointer.checkpoint();
       } catch (Exception e) {
-        //System.out.println("Error while trying to checkpoint during Shutdown" + e);
         LOGGER.error("Error while trying to checkpoint during Shutdown" + e);
       }
     }
@@ -109,6 +102,7 @@ public class SimpleConsumer implements IRecordProcessorFactory {
 
     if (line.hasOption("help")) {
       new HelpFormatter().printHelp(MethodHandles.lookup().lookupClass().getName(), options);
+      System.exit(1);
     } else if (!line.hasOption("streamName")) {
       throw new IllegalArgumentException("Missings 'streamName' argument");
     }
@@ -138,7 +132,6 @@ public class SimpleConsumer implements IRecordProcessorFactory {
         .build()
         .run();
 
-    //System.out.println("Finished.");
     LOGGER.info("Finished");
 
   }

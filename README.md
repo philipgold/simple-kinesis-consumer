@@ -23,7 +23,19 @@ $ java -jar simple-kinesis-consumer.jar -streamName <STREAM NAME>
 
 Optional arguments
 ```shell script
-$ java -jar simple-kinesis-consumer.jar -streamName <STREAM NAME> -streamRegion us-east-1 -profile default
+$ java -jar simple-kinesis-consumer.jar -help
+ usage: simple.kinesis.consumer.SimpleConsumer
+  -help               print this help message
+  -profile            the profile name of the CredentialsProvider for
+                      conection to AWS KDS
+  -streamName <arg>   the name of the kinesis stream the events are sent to
+  -streamRegion       the region of the Kinesis stream
+
+```
+
+Example
+```shell script
+$ java -jar simple-kinesis-consumer.jar -streamName my-events -streamRegion us-east-1 -profile default
 ``` 
 
 Default arguments: 

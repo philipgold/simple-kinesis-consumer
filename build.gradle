@@ -15,23 +15,18 @@ plugins {
 }
 
 sourceCompatibility = 1.8
-//systemProperty 'logback.configurationFile', 'logback.xml'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     compile group: 'com.amazonaws', name: 'amazon-kinesis-client', version: '1.8.9'
     compile group: 'com.amazonaws', name: 'amazon-kinesis-producer', version: '0.12.8'
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-    //compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.+'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    //compile group: 'ch.qos.logback', name: 'logback-core', version: '1.+'
-    //compile 'org.slf4j:slf4j-nop:1.7.25'
 }
 
 application {
@@ -42,7 +37,6 @@ application {
 jar {
     manifest {
         attributes 'Main-Class': 'simple.kinesis.consumer.SimpleConsumer'
-
     }
 
     from {
