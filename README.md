@@ -31,7 +31,7 @@ Default arguments:
 * AWS credentials profile = default 
 
 
-### Get aws kinesis list-streams"
+### Get aws kinesis list-streams
 ```shell script
 $ aws kinesis list-streams --region us-east-1 --profile default
 ```
