@@ -3,6 +3,7 @@
  */
 package simple.kinesis.consumer;
 
+
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.kinesis.clientlibrary.interfaces.IRecordProcessor;
@@ -11,16 +12,19 @@ import com.amazonaws.services.kinesis.clientlibrary.interfaces.IRecordProcessorF
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.InitialPositionInStream;
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.KinesisClientLibConfiguration;
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.ShutdownReason;
-import com.amazonaws.services.kinesis.clientlibrary.lib.worker.Worker;
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.Worker.Builder;
 import com.amazonaws.services.kinesis.model.Record;
-import com.google.common.base.Strings;
 import java.lang.invoke.MethodHandles;
 import org.apache.commons.cli.*;
 
 import java.util.List;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.util.StatusPrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SimpleConsumer implements IRecordProcessorFactory {
+  public static final Logger LOGGER = LoggerFactory.getLogger(SimpleConsumer.class);
 
   private static final String DEFAULT_REGION_NAME =
       Regions.getCurrentRegion() == null ? "us-east-1" : Regions.getCurrentRegion().getName();
@@ -41,6 +45,7 @@ public class SimpleConsumer implements IRecordProcessorFactory {
 
     @Override
     public void initialize(String shardId) {
+      LOGGER.info("initialized shardId: " + shardId);
     }
 
     @Override
@@ -48,7 +53,8 @@ public class SimpleConsumer implements IRecordProcessorFactory {
 
       for (Record r : records) {
         // Get the timestamp of this run from the partition key.
-        System.out.println("### PartitionKey: " + r.getPartitionKey());
+        //System.out.println("### PartitionKey: " + r.getPartitionKey());
+        LOGGER.info("### PartitionKey: " + r.getPartitionKey());
 
         // Extract the sequence number. It's encoded as a decimal
         // string and placed at the beginning of the record data,
@@ -57,9 +63,11 @@ public class SimpleConsumer implements IRecordProcessorFactory {
         try {
           byte[] b = new byte[r.getData().remaining()];
           r.getData().get(b);
-          System.out.println(new String(b, "UTF-8"));
+          //System.out.println(new String(b, "UTF-8"));
+          LOGGER.info(new String(b, "UTF-8"));
         } catch (Exception e) {
-          System.out.println("Error parsing record" + e);
+          //System.out.println("Error parsing record" + e);
+          LOGGER.error("Error parsing record" + e);
           System.exit(1);
         }
       }
@@ -67,7 +75,8 @@ public class SimpleConsumer implements IRecordProcessorFactory {
       try {
         checkpointer.checkpoint();
       } catch (Exception e) {
-        System.out.println("Error while trying to checkpoint during ProcessRecords" + e);
+        //System.out.println("Error while trying to checkpoint during ProcessRecords" + e);
+        LOGGER.error("Error while trying to checkpoint during ProcessRecords" + e);
       }
     }
 
@@ -77,7 +86,8 @@ public class SimpleConsumer implements IRecordProcessorFactory {
       try {
         checkpointer.checkpoint();
       } catch (Exception e) {
-        System.out.println("Error while trying to checkpoint during Shutdown" + e);
+        //System.out.println("Error while trying to checkpoint during Shutdown" + e);
+        LOGGER.error("Error while trying to checkpoint during Shutdown" + e);
       }
     }
   }
@@ -88,7 +98,7 @@ public class SimpleConsumer implements IRecordProcessorFactory {
   }
 
   public static void main(String[] args) throws Exception {
-
+    LOGGER.info("main");
     Options options = new Options()
         .addOption("streamRegion", false, "the region of the Kinesis stream")
         .addOption("streamName", true, "the name of the kinesis stream the events are sent to")
@@ -128,6 +138,8 @@ public class SimpleConsumer implements IRecordProcessorFactory {
         .build()
         .run();
 
-    System.out.println("Finished.");
+    //System.out.println("Finished.");
+    LOGGER.info("Finished");
+
   }
 }

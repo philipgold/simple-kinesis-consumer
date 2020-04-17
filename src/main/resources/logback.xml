@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+  <timestamp key="byDay" datePattern="yyyyMMdd'T'HHmmss"/>
+
+  <appender name="file" class="ch.qos.logback.core.FileAppender">
+    <file>logs/simple-kinesis-consumer-${byDay}.log</file>
+    <append>true</append>
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>%date %-5level %logger{50}.%M:%L - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%class{50}.%M:%L) - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="simple.kinesis.consumer" level="debug"/>
+
+  <root level="debug">
+    <appender-ref ref="file"/>
+    <appender-ref ref="console"/>
+  </root>
+</configuration>
